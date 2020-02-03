@@ -1,5 +1,5 @@
 import React, {useMemo, useState} from 'react'
-import {createReatomStore, addItem, action} from './createReatomStore.js'
+import {createReatomStore, addItem, removeItem} from './createReatomStore.js'
 import './ReatomApp.css'
 
 function prepareList(store, root) {
@@ -8,7 +8,7 @@ function prepareList(store, root) {
 <div>
 	<div>id: {item.id}</div>
 	<div>name: {item.name}</div>
-	<button onClick={() => store.dispatch(action(item.id))}>Delete</button>
+	<button onClick={() => store.dispatch(removeItem(item.id))}>Delete</button>
 </div>
 )
 }
