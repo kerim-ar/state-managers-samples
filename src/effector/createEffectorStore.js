@@ -1,22 +1,33 @@
 import {createStore, createEvent, createEffect, combine} from 'effector'
+import {ConnectorType} from '../common/connector.js'
 
+// events
 const setTitle = createEvent()
-
 const addItem = createEvent()
 const removeItemImpl = createEvent()
-
-const removeItem = createEffect()
 const setItemEnabled = createEvent()
-
 const removeUnavailableItemStates = createEvent()
+
+// side effects
+const removeItem = createEffect()
 
 let counter = 0
 
+/**
+ * @param {ConnectorType} connector 
+ */
 function createEffectorStore(connector) {
 	const title = createStore('TODO List')
 		.on(setTitle, (_, newTitle) => newTitle)
 
-	const list = createStore([])
+	/**
+	 * @type {Array<{
+	 *   id: string,
+	 *   name: string,
+	 * }>}
+	 */
+	const listData = []
+	const list = createStore(listData)
 		.on(addItem, state => {
 			const res = [...state, {
 				id: `id${counter}`,
@@ -27,7 +38,11 @@ function createEffectorStore(connector) {
 		})
 		.on(removeItemImpl, (state, itemId) => state.filter(item => item.id !== itemId))
 
-	const listState = createStore([])
+	/**
+	 * @type {Object<string, boolean>}
+	 */
+	const listStateData = {}
+	const listState = createStore(listStateData)
 		.on(removeUnavailableItemStates, (state, items) => state.filter(item => !items.include(item.id)))
 		.on(setItemEnabled, (state, {id, enabled}) => {
 			return {
