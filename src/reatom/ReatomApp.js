@@ -1,14 +1,18 @@
 import React, {useMemo, useState} from 'react'
 import {createReatomStore, addItem, removeItem} from './createReatomStore.js'
+import {connector} from '../common/connector.js'
 import './ReatomApp.css'
 
 function prepareList(store, root) {
-	const {list} = store.getState(root)
+	const {list, listState} = store.getState(root)
 	return list.map(item => 
 <div>
 	<div>id: {item.id}</div>
 	<div>name: {item.name}</div>
-	<button onClick={() => store.dispatch(removeItem(item.id))}>Delete</button>
+	<button 
+		onClick={() => store.dispatch(removeItem(item.id))} 
+		disabled={(listState[item.id] === undefined || !!listState[item.id]) ? null : 'disabled'}
+	>Delete</button>
 </div>
 )
 }
@@ -16,7 +20,7 @@ function prepareList(store, root) {
 function ReatomApp() {
 	const [, redraw] = useState()
 	const {store, root} = useMemo(() => {
-		const {store: s, root} = createReatomStore()
+		const {store: s, root} = createReatomStore(connector)
 		s.subscribe(root, redraw)
 		return {
 			store: s,

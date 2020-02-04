@@ -3,13 +3,36 @@ import { declareAction, declareAtom, createStore, combine } from "@reatom/core";
 const setTitle = declareAction();
 
 const addItem = declareAction();
-const removeItem = declareAction();
+const removeItemImpl = declareAction()
 
-const action = declareAction()
+const setItemEnabled = declareAction()
+
+let removeItem = null
+
+const removeUnavailableItemStates = declareAction()
 
 let counter = 0
 
-function createReatomStore() {
+function createReatomStore(connector) {
+	removeItem = declareAction(async (itemId, store) => {
+		store.dispatch(setItemEnabled({
+			id: itemId,
+			enabled: false,
+		}))
+		const canRemoveItem = await connector.canRemoveItem(itemId)
+		if (canRemoveItem)
+		{
+			store.dispatch(removeItemImpl(itemId))
+		}
+		else
+		{
+			store.dispatch(setItemEnabled({
+				id: itemId,
+				enabled: true,
+			}))
+		}
+	});
+
 	const title = declareAtom('TODO List', on => [
 		on(setTitle, (_, newTitle) => newTitle)
 	]);
@@ -22,11 +45,23 @@ function createReatomStore() {
 			counter++
 			return res
 		}),
-		on(removeItem, (state, itemId) => state.filter(item => item.id !== itemId))
+		on(removeItemImpl, (state, itemId) => state.filter(item => item.id !== itemId))
 	]);
+
+	const listState = declareAtom([], on => [
+		on(removeUnavailableItemStates, (state, items) => state.filter(item => !items.include(item.id))),
+		on(setItemEnabled, (state, {id, enabled}) => {
+			return {
+				...state,
+				[id]: enabled,
+			}
+		})
+	])
+
 	const root = combine({
 		title,
-		list
+		list,
+		listState,
 	})
 	return {
 		root,
@@ -41,5 +76,4 @@ export {
 	
 	addItem,
 	removeItem,
-	action,
 }
