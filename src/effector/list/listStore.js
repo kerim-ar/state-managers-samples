@@ -4,7 +4,7 @@ import { setItemEnabled } from './listStateStore.js'
 
 let counter = 0
 
-/** @type {Effect<string>} */
+/** @type {Effect<string, *, *>} */
 const removeItem = createEffect()
 
 /** @type {Event<void>} */
@@ -18,7 +18,7 @@ const removeItemCompleted = createEvent()
 /**
  * @param {{
  *   canRemoveItem: function(string):Promise<boolean>,
- * }} connector 
+ * }} connector
  */
 function createListStore(connector) {
 	const store = createStore(/** @type {ListType} */([]))
@@ -30,7 +30,7 @@ function createListStore(connector) {
 			counter++
 			return res
 		})
-		.on(removeItemCompleted, (state, itemId) => 
+		.on(removeItemCompleted, (state, itemId) =>
 			state.filter(item => item.id !== itemId)
 		)
 
@@ -52,7 +52,7 @@ function createListStore(connector) {
 			})
 		}
 	})
-	
+
 	return store
 }
 

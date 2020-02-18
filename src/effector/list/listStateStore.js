@@ -1,11 +1,11 @@
-import { createEffect, Effect, createStore } from "effector";
+import { Event, createStore, createEvent } from "effector";
 import { ListStateType } from "../../common/listState";
 
-/** @type {Effect<{
+/** @type {Event<{
  *   id: string,
  *   enabled: boolean,
  * }>} */
-const setItemEnabled = createEffect()
+const setItemEnabled = createEvent()
 
 function createListStateStore() {
 	return createStore(/** @type {ListStateType} */({}))

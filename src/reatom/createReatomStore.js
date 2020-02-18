@@ -1,4 +1,4 @@
-//@ts-check
+//@ts-nocheck
 
 import { declareAction, declareAtom, createStore, combine, PayloadActionCreator } from "@reatom/core";
 import {ConnectorType} from '../common/connector.js'
@@ -19,12 +19,15 @@ const removeItemImpl = declareAction()
 const setItemEnabled = declareAction()
 
 // side effects
+/**
+ * @type {Function}
+ */
 let removeItem = null
 
 let counter = 0
 
 /**
- * @param {ConnectorType} connector 
+ * @param {ConnectorType} connector
  */
 function createReatomStore(connector) {
 	removeItem = declareAction(async (itemId, store) => {
@@ -95,9 +98,9 @@ function createReatomStore(connector) {
 
 export {
 	createReatomStore,
-	
+
 	setTitle,
-	
+
 	addItem,
 	removeItem,
 }

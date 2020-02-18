@@ -1,8 +1,5 @@
 /**
- * @typedef {{
- *   id: string,
- *   enabled: boolean,
- * }}
+ * @typedef {Object<string, boolean>}
  */
 let ListStateType
 

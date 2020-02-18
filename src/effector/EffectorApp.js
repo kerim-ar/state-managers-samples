@@ -4,17 +4,19 @@ import './EffectorApp.css'
 import { createTodoStore } from './todo/todoStore.js'
 import { removeItem, addItem } from './list/listStore.js'
 import { ListType } from '../common/list.js'
+import { ListStateType } from '../common/listState.js'
 
 /**
  * @param {ListType} list
+ * @param {ListStateType} listState
  */
 function ListView(list, listState) {
-	return list.map(item => 
+	return list.map(item =>
 <div>
 	<div>id: {item.id}</div>
 	<div>name: {item.name}</div>
-	<button 
-		onClick={() => removeItem(item.id)} 
+	<button
+		onClick={() => removeItem(item.id)}
 		disabled={(listState[item.id] === undefined || !!listState[item.id]) ? false : true}
 	>Delete</button>
 </div>
