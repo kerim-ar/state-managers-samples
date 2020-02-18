@@ -1,15 +1,15 @@
 /**
  * @typedef {{
- *   canRemoveItem: function():Promise<boolean>,
+ *   canRemoveItem: function(string):Promise<boolean>,
  * }}
  */
 let ConnectorType
 
 /**
- * @type {Connector}
+ * @type {ConnectorType}
  */
 const connector = {
-	canRemoveItem: () => new Promise((resolve, reject) => setTimeout(resolve, 5000, true))
+	canRemoveItem: id => new Promise((resolve, reject) => setTimeout(resolve, 5000, true))
 }
 
 export {

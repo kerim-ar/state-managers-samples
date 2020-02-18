@@ -1,12 +1,22 @@
-import { declareAction, declareAtom, createStore, combine } from "@reatom/core";
+//@ts-check
+
+import { declareAction, declareAtom, createStore, combine, PayloadActionCreator } from "@reatom/core";
 import {ConnectorType} from '../common/connector.js'
 
 // actions
 const setTitle = declareAction();
 const addItem = declareAction();
+/**
+ * @type {PayloadActionCreator<string>}
+ */
 const removeItemImpl = declareAction()
+/**
+ * @type {PayloadActionCreator<{
+ *   id: string,
+ *   enabled: boolean,
+ * }, string>}
+ */
 const setItemEnabled = declareAction()
-const removeUnavailableItemStates = declareAction()
 
 // side effects
 let removeItem = null
@@ -64,7 +74,6 @@ function createReatomStore(connector) {
 	 */
 	const listStateData = {}
 	const listState = declareAtom(listStateData, on => [
-		on(removeUnavailableItemStates, (state, items) => state.filter(item => !items.include(item.id))),
 		on(setItemEnabled, (state, {id, enabled}) => {
 			return {
 				...state,

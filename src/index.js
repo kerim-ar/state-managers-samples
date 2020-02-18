@@ -2,13 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 // import App from './App';
-// import EffectorApp from './effector/EffectorApp';
-import ReatomApp from './reatom/ReatomApp'
+import EffectorApp from './effector/EffectorApp';
+// import ReatomApp from './reatom/ReatomApp'
 import * as serviceWorker from './serviceWorker';
 
 // ReactDOM.render(<App />, document.getElementById('root'));
-// ReactDOM.render(<EffectorApp />, document.getElementById('root'))
-ReactDOM.render(<ReatomApp />, document.getElementById('root'))
+ReactDOM.render(<EffectorApp />, document.getElementById('root'))
+// ReactDOM.render(<ReatomApp />, document.getElementById('root'))
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

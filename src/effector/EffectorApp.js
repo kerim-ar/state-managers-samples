@@ -1,26 +1,21 @@
 import React, {useMemo, useState} from 'react'
-import {createEffectorStore, addItem, removeItem} from './createEffectorStore.js'
 import {connector} from '../common/connector.js'
 import './EffectorApp.css'
+import { createTodoStore } from './todo/todoStore.js'
+import { removeItem, addItem } from './list/listStore.js'
+import { ListType } from '../common/list.js'
 
 /**
- * @param {Array<{
- *   id: string,
- *   name: string,
- * }>} list
- * @param {Array<{
- *   id: string,
- *   enabled: string,
- * }>} listState
+ * @param {ListType} list
  */
-function prepareList(list, listState) {
+function ListView(list, listState) {
 	return list.map(item => 
 <div>
 	<div>id: {item.id}</div>
 	<div>name: {item.name}</div>
 	<button 
 		onClick={() => removeItem(item.id)} 
-		disabled={(listState[item.id] === undefined || !!listState[item.id]) ? null : 'disabled'}
+		disabled={(listState[item.id] === undefined || !!listState[item.id]) ? false : true}
 	>Delete</button>
 </div>
 )
@@ -29,7 +24,7 @@ function prepareList(list, listState) {
 function EffectorApp() {
 	const [, redraw] = useState()
 	const store = useMemo(() => {
-		const s = createEffectorStore(connector)
+		const s = createTodoStore(connector)
 		s.watch(redraw)
 		return s
 	}, [])
@@ -40,9 +35,9 @@ function EffectorApp() {
 	<h1>Effector</h1>
 	<div>
 		<div>{title}</div>
-		<button onClick={addItem}>Add Task</button>
+		<button onClick={() => addItem()}>Add Task</button>
 	</div>
-	{prepareList(list, listState)}
+	{ListView(list, listState)}
 </div>
 );
 }
