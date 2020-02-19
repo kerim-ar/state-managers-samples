@@ -14,7 +14,7 @@ function ItemView({item}) {
 		sideEffect: removeItem,
 		onStarted: removedItemId => setDisabled(removedItemId === item.id),
 		onCompleted: () => setDisabled(false),
-		onFailed: undefined,
+		onFailed: () => setDisabled(false),
 	})
 	return (
 <div>

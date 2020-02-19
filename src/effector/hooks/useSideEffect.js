@@ -33,7 +33,8 @@ function useSideEffect({sideEffect, onStarted, onCompleted, onFailed}) {
 			onCompletedUnwatchFn && onCompletedUnwatchFn()
 			onFailedUnwatchFn && onFailedUnwatchFn()
 		}
-	}, [onCompleted, onFailed, onStarted, sideEffect])
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [sideEffect])
 }
 
 export {

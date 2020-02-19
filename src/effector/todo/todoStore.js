@@ -1,6 +1,6 @@
-import { createStore, combine, createEvent, Event, restore } from "effector";
+import { createStore, combine, createEvent, Event } from "effector";
 import {ConnectorType} from '../../common/connector.js'
-import {createListStore, initList} from '../list/listStore.js'
+import {createListStore} from '../list/listStore.js'
 import { TodoType } from "../../common/todo.js";
 
 /** @type {Event<string>} */

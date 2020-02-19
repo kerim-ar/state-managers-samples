@@ -2,8 +2,10 @@ import React, {useMemo, useState} from 'react'
 import {connector} from '../../common/connector.js'
 import './EffectorApp.css'
 import { createTodoStore } from '../todo/todoStore.js'
-import { addItem } from '../list/listStore.js'
+import { addItem, removeItem } from '../list/listStore.js'
 import { ListView } from './ListView.js'
+import { useSideEffect } from '../hooks/useSideEffect.js'
+import { showError } from '../error/errorManager.js'
 
 const KEY = 'effector-app'
 
@@ -20,6 +22,13 @@ function EffectorApp() {
 		return s
 	}, [])
 	const {title, list} = store.getState()
+
+	useSideEffect({
+		sideEffect: removeItem,
+		onStarted: undefined,
+		onCompleted: undefined,
+		onFailed: itemId => showError(itemId)
+	})
 
 	return (
 <div className="Effector">

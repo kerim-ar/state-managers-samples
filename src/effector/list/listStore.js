@@ -25,9 +25,6 @@ const removeItem = createEffect()
 /** @type {Event<void>} */
 const addItem = createEvent()
 
-/** @type {Event<string>} */
-const removeItemCompleted = createEvent()
-
 /** @type {Event<ListType>} */
 const initList = createEvent()
 
@@ -57,17 +54,17 @@ function createListStore(connector, initialState) {
 			counter++
 			return res
 		})
-		.on(removeItemCompleted, (state, itemId) =>
+		.on(removeItem.done, (state, {params: itemId}) =>
 			state.filter(item => item.id !== itemId)
 		)
 
 	removeItem.use(async itemId => {
-		console.log('removeItem effect')
 		const canRemoveItem = await connector.canRemoveItem(itemId)
 		if (canRemoveItem)
 		{
-			removeItemCompleted(itemId)
+			return itemId
 		}
+		return Promise.reject(itemId)
 	})
 
 	return store
@@ -77,8 +74,5 @@ export {
 	createListStore,
 
 	addItem,
-	removeItemCompleted,
-
 	removeItem,
-	initList,
 }
