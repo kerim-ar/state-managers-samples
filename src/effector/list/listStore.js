@@ -1,6 +1,5 @@
 import {Effect,Event, createStore, createEffect, createEvent} from 'effector'
 import { ListType } from '../../common/list.js'
-import { setItemEnabled } from './listStateStore.js'
 
 let counter = 0
 
@@ -10,8 +9,6 @@ const removeItem = createEffect()
 /** @type {Event<void>} */
 const addItem = createEvent()
 
-/** @type {Event<string>} */
-const removeItemStarted = createEvent()
 /** @type {Event<string>} */
 const removeItemCompleted = createEvent()
 
@@ -35,21 +32,11 @@ function createListStore(connector) {
 		)
 
 	removeItem.use(async itemId => {
-		setItemEnabled({
-			id: itemId,
-			enabled: false,
-		})
+		console.log('removeItem effect')
 		const canRemoveItem = await connector.canRemoveItem(itemId)
 		if (canRemoveItem)
 		{
 			removeItemCompleted(itemId)
-		}
-		else
-		{
-			setItemEnabled({
-				id: itemId,
-				enabled: true,
-			})
 		}
 	})
 

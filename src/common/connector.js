@@ -9,7 +9,7 @@ let ConnectorType
  * @type {ConnectorType}
  */
 const connector = {
-	canRemoveItem: id => new Promise((resolve, reject) => setTimeout(resolve, 5000, true))
+	canRemoveItem: id => new Promise((resolve, reject) => setTimeout(resolve, 3000, true))
 }
 
 export {

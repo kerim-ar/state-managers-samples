@@ -5,6 +5,7 @@ import { createTodoStore } from './todo/todoStore.js'
 import { removeItem, addItem } from './list/listStore.js'
 import { ListType } from '../common/list.js'
 import { ListStateType } from '../common/listState.js'
+import { useSideEffect } from './hooks/useSideEffect.js'
 
 /**
  * @param {ListType} list
@@ -30,7 +31,27 @@ function EffectorApp() {
 		s.watch(redraw)
 		return s
 	}, [])
-	const {title, list, listState} = store.getState()
+	const {title, list} = store.getState()
+
+	const [listState, setListState] = useState(() => /** @type {ListStateType} */({}))
+	useSideEffect({
+		sideEffect: removeItem,
+		onStarted: removedItemId => {
+			console.log('onStarted')
+			setListState({
+				...listState,
+				[removedItemId]: false,
+			})
+		},
+		onCompleted: removedItemId => {
+			console.log('onCompleted')
+			setListState({
+				...listState,
+				[removedItemId]: true,
+			})
+		},
+		onFailed: undefined,
+	})
 
 	return (
 <div className="Effector">
