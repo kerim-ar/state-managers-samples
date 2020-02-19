@@ -1,5 +1,5 @@
 import React from 'react'
-import { ListType } from '../common/list'
+import { ListType } from '../../common/list'
 import { ItemView } from './ItemView'
 
 /**

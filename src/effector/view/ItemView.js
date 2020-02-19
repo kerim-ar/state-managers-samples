@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { removeItem } from './list/listStore'
-import { useSideEffect } from './hooks/useSideEffect'
-import { ListItemType } from '../common/list'
+import { removeItem } from '../list/listStore'
+import { useSideEffect } from '../hooks/useSideEffect'
+import { ListItemType } from '../../common/list'
 
 /**
  * @param {{

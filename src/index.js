@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 // import App from './App';
-import EffectorApp from './effector/EffectorApp';
+import EffectorApp from './effector/view/EffectorApp';
 // import ReatomApp from './reatom/ReatomApp'
 import * as serviceWorker from './serviceWorker';
 

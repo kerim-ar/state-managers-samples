@@ -1,29 +1,27 @@
-import { createStore, combine, createEvent, Event } from "effector";
+import { createStore, combine, createEvent, Event, restore } from "effector";
 import {ConnectorType} from '../../common/connector.js'
-import {createListStore} from '../list/listStore.js'
+import {createListStore, initList} from '../list/listStore.js'
+import { TodoType } from "../../common/todo.js";
 
 /** @type {Event<string>} */
 const setTitle = createEvent()
 
 /**
- * @param {string} title
- * @param {string} newTitle
- */
-function setTitleHandler(title, newTitle) {
-	return newTitle
-}
-
-/**
  * @param {ConnectorType} connector
+ * @param {?TodoType} initialState
  */
-function createTodoStore(connector) {
-	const title = createStore('TODO List')
-		.on(setTitle, setTitleHandler)
+function createTodoStore(connector, initialState) {
+	const initialTitle = initialState ? initialState.title : 'Default title'
+	const title = createStore(initialTitle)
+		.on(setTitle, (_, payload) => payload)
 
-	return combine({
+	const listInitialState = initialState ? initialState.list : null
+	const store = combine({
 		title,
-		list: createListStore(connector),
+		list: createListStore(connector, listInitialState),
 	})
+
+	return store
 }
 
 export {

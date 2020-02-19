@@ -3,6 +3,22 @@ import { ListType } from '../../common/list.js'
 
 let counter = 0
 
+/**
+ * @param {ListType} list
+ */
+function getCounterValue(list) {
+	let res = 0
+	for (const item of list)
+	{
+		const value = Number(item.id.substring(2))
+		if (value > res)
+		{
+			res = value
+		}
+	}
+	return ++res
+}
+
 /** @type {Effect<string, *, *>} */
 const removeItem = createEffect()
 
@@ -12,13 +28,27 @@ const addItem = createEvent()
 /** @type {Event<string>} */
 const removeItemCompleted = createEvent()
 
+/** @type {Event<ListType>} */
+const initList = createEvent()
+
 /**
  * @param {{
  *   canRemoveItem: function(string):Promise<boolean>,
  * }} connector
+ * @param {?ListType} initialState
  */
-function createListStore(connector) {
-	const store = createStore(/** @type {ListType} */([]))
+function createListStore(connector, initialState) {
+	/** @type {ListType} */
+	let initState = []
+
+	if (initialState)
+	{
+		initState = initialState
+		counter = getCounterValue(initialState)
+	}
+
+	const store = createStore(initState)
+		.on(initList, (_, payload) => payload)
 		.on(addItem, state => {
 			const res = [...state, {
 				id: `id${counter}`,
@@ -50,4 +80,5 @@ export {
 	removeItemCompleted,
 
 	removeItem,
+	initList,
 }
