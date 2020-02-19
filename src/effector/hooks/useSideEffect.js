@@ -1,4 +1,4 @@
-import {Effect} from 'effector'
+import {Effect, Subscription} from 'effector'
 import { useEffect } from 'react'
 
 /**
@@ -12,14 +12,28 @@ import { useEffect } from 'react'
  */
 function useSideEffect({sideEffect, onStarted, onCompleted, onFailed}) {
 	useEffect(() => {
-		sideEffect.watch(payload => {
+		/** @type {?Subscription} */
+		let onCompletedUnwatchFn = null
+		/** @type {?Subscription} */
+		let onFailedUnwatchFn = null
+		const onStartedUnwatchFn = sideEffect.watch(payload => {
 			onStarted && onStarted(payload)
-			onCompleted && sideEffect.done.watch(({params}) => onCompleted(params))
-			onFailed && sideEffect.fail.watch(({params}) => onFailed(params))
+
+			onCompletedUnwatchFn = onCompleted
+				? sideEffect.done.watch(({params}) => onCompleted(params))
+				: null
+
+			onFailedUnwatchFn =	onFailed
+				? sideEffect.fail.watch(({params}) => onFailed(params))
+				: null
 
 		})
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [sideEffect])
+		return () => {
+			onStartedUnwatchFn()
+			onCompletedUnwatchFn && onCompletedUnwatchFn()
+			onFailedUnwatchFn && onFailedUnwatchFn()
+		}
+	}, [onCompleted, onFailed, onStarted, sideEffect])
 }
 
 export {

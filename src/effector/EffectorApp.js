@@ -3,15 +3,7 @@ import {connector} from '../common/connector.js'
 import './EffectorApp.css'
 import { createTodoStore } from './todo/todoStore.js'
 import { addItem } from './list/listStore.js'
-import { ListType } from '../common/list.js'
-import { ItemView } from './ItemView.js'
-
-/**
- * @param {ListType} list
- */
-function ListView(list) {
-	return list.map(item => <ItemView item={item}></ItemView>)
-}
+import { ListView } from './ListView.js'
 
 function EffectorApp() {
 	const [, redraw] = useState()
@@ -29,7 +21,7 @@ function EffectorApp() {
 		<div>{title}</div>
 		<button onClick={() => addItem()}>Add Task</button>
 	</div>
-	{ListView(list)}
+	<ListView list={list}></ListView>
 </div>
 );
 }
